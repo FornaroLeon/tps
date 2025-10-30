@@ -1,34 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <title>Anagrafica Utente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .contenitore {
+      background-color: white;
+      display: inline-block;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 6px;
+      margin: 5px 0 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="button"] {
+      background-color: #2a64c5;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    input[type="button"]:hover {
+      background-color: #1f4ea5;
+    }
+    #risultato {
+      margin-top: 20px;
+      text-align: left;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Anagrafica Utente</h2>
 
-  <label>Nome:</label><br>
-  <input type="text" id="nome"><br><br>
+  <div class="contenitore">
+    <h2>Anagrafica Utente</h2>
 
-  <label>Cognome:</label><br>
-  <input type="text" id="cognome"><br><br>
+    <label>Nome:</label><br>
+    <input type="text" id="nome"><br>
 
-  <label>Indirizzo:</label><br>
-  <input type="text" id="indirizzo"><br><br>
+    <label>Cognome:</label><br>
+    <input type="text" id="cognome"><br>
 
-  <label>Città:</label><br>
-  <input type="text" id="citta"><br><br>
+    <label>Indirizzo:</label><br>
+    <input type="text" id="indirizzo"><br>
 
-  <label>CAP:</label><br>
-  <input type="text" id="cap"><br><br>
+    <label>Città:</label><br>
+    <input type="text" id="citta"><br>
 
-  <label>Anno di nascita:</label><br>
-  <input type="text" id="anno"><br><br>
+    <label>CAP:</label><br>
+    <input type="text" id="cap"><br>
 
-  <input type="button" value="Mostra dati" onclick="mostraDati()">
+    <label>Anno di nascita:</label><br>
+    <input type="text" id="anno"><br><br>
 
-  <h3>Risultato:</h3>
-  <div id="risultato"></div>
+    <input type="button" value="Mostra dati" onclick="mostraDati()">
+
+    <div id="risultato"></div>
+  </div>
 
   <script>
     function mostraDati() {
@@ -63,17 +107,18 @@
       }
 
       let testo = "";
-      testo += "Nome: " + nome + "<br>";
-      testo += "Cognome: " + cognome + "<br>";
-      testo += "Indirizzo: " + indirizzo + "<br>";
-      testo += "Città: " + citta + "<br>";
-      testo += "CAP: " + cap + "<br>";
-      testo += "Anno di nascita: " + anno + "<br>";
-      testo += "Età: " + eta + "<br>";
-      testo += "Generazione: " + generazione + "<br>";
+      testo += "<b>Nome:</b> " + nome + "<br>";
+      testo += "<b>Cognome:</b> " + cognome + "<br>";
+      testo += "<b>Indirizzo:</b> " + indirizzo + "<br>";
+      testo += "<b>Città:</b> " + citta + "<br>";
+      testo += "<b>CAP:</b> " + cap + "<br>";
+      testo += "<b>Anno di nascita:</b> " + anno + "<br>";
+      testo += "<b>Età:</b> " + eta + "<br>";
+      testo += "<b>Generazione:</b> " + generazione + "<br>";
 
       document.getElementById("risultato").innerHTML = testo;
     }
   </script>
+
 </body>
 </html>
