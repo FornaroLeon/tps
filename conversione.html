@@ -2,6 +2,40 @@
 <html>
 <head>
   <title>Convertitore da Decimale a Binario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      color: #333;
+    }
+    input {
+      margin: 5px;
+      padding: 5px;
+      width: 70px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    #risultato {
+      margin-top: 10px;
+      font-family: monospace;
+      color: #222;
+    }
+  </style>
 </head>
 <body>
   <h2>Converti 4 numeri decimali in binario</h2>
@@ -12,14 +46,13 @@
   <input type="number" id="num4" min="0" max="255" placeholder="0-255">
   
   <br><br>
-  <button onclick="converti()">Converti in binario</button>
+  <button onclick="converti()">Converti</button>
 
   <h3>Risultato:</h3>
   <p id="risultato"></p>
 
   <script>
     function converti() {
-     
       let numeri = [
         document.getElementById("num1").value,
         document.getElementById("num2").value,
@@ -35,11 +68,7 @@
         if (isNaN(n) || n < 0 || n > 255) {
           binari += "Errore ";
         } else {
-          
-          let bin = n.toString(2);
-          while (bin.length < 8) {
-            bin = "0" + bin;
-          }
+          let bin = n.toString(2).padStart(8, "0");
           binari += bin + " ";
         }
       }
