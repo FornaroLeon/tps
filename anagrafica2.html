@@ -4,28 +4,49 @@
   <meta charset="UTF-8">
   <title>Anagrafica Senza Commenti</title>
   <style>
+    /* Imposta il body per usare Flexbox */
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       background-color: #f4f4f9;
+      margin: 0;
     }
+    
+    /* Container per il modulo */
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background-color: white;
+      padding: 30px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
     h2 {
+      text-align: center;
       color: #4CAF50;
     }
+
     input, select, button {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       padding: 8px;
       width: 100%;
-      max-width: 300px;
+      max-width: 100%;
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
       font-size: 14px;
     }
+
     input:focus, select:focus {
       border-color: #4CAF50;
       outline: none;
     }
+
     label {
       display: inline-block;
       width: 100%;
@@ -33,6 +54,7 @@
       font-weight: bold;
       color: #333;
     }
+
     .sezione {
       margin-top: 20px;
       padding: 15px;
@@ -40,23 +62,25 @@
       border-radius: 6px;
       border: 1px solid #d1e7d1;
     }
+
     .sezione p {
       font-weight: bold;
       color: #2f6a3c;
     }
+
     .sezione input[type="radio"], .sezione input[type="checkbox"] {
       margin-right: 8px;
     }
+
     #risultato {
       margin-top: 20px;
       padding: 15px;
       border: 1px solid #ddd;
       background-color: #fff;
-      width: 100%;
-      max-width: 500px;
       border-radius: 6px;
       box-sizing: border-box;
     }
+
     button {
       background-color: #4CAF50;
       color: white;
@@ -66,9 +90,9 @@
       font-weight: bold;
       padding: 12px;
       width: 100%;
-      max-width: 320px;
       border-radius: 6px;
     }
+
     button:hover {
       background-color: #45a049;
     }
@@ -76,68 +100,70 @@
 </head>
 <body>
 
-  <h2>Modulo Anagrafica</h2>
+  <div class="container">
+    <h2>Modulo Anagrafica</h2>
 
-  <label for="nome">Nome:</label>
-  <input type="text" id="nome"><br>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome"><br>
 
-  <label for="cognome">Cognome:</label>
-  <input type="text" id="cognome"><br>
+    <label for="cognome">Cognome:</label>
+    <input type="text" id="cognome"><br>
 
-  <label for="indirizzo">Indirizzo:</label>
-  <input type="text" id="indirizzo"><br>
+    <label for="indirizzo">Indirizzo:</label>
+    <input type="text" id="indirizzo"><br>
 
-  <label for="citta">Città:</label>
-  <input type="text" id="citta"><br>
+    <label for="citta">Città:</label>
+    <input type="text" id="citta"><br>
 
-  <label for="cap">CAP:</label>
-  <input type="text" id="cap"><br>
+    <label for="cap">CAP:</label>
+    <input type="text" id="cap"><br>
 
-  <label for="anno">Anno di nascita:</label>
-  <input type="text" id="anno"><br>
+    <label for="anno">Anno di nascita:</label>
+    <input type="text" id="anno"><br>
 
-  <div class="sezione">
-    <p><b>Sesso:</b></p>
-    <input type="radio" id="sesso_m" name="sesso" value="Maschile" checked>
-    <label for="sesso_m" style="width: auto;">Maschile</label><br>
+    <div class="sezione">
+      <p><b>Sesso:</b></p>
+      <input type="radio" id="sesso_m" name="sesso" value="Maschile" checked>
+      <label for="sesso_m" style="width: auto;">Maschile</label><br>
 
-    <input type="radio" id="sesso_f" name="sesso" value="Femminile">
-    <label for="sesso_f" style="width: auto;">Femminile</label><br>
-  </div>
+      <input type="radio" id="sesso_f" name="sesso" value="Femminile">
+      <label for="sesso_f" style="width: auto;">Femminile</label><br>
+    </div>
 
-  <div class="sezione">
-    <p><b>Veicoli posseduti:</b></p>
-    <input type="checkbox" id="auto" name="veicoli" value="Auto">
-    <label for="auto" style="width: auto;">Auto</label><br>
-    
-    <input type="checkbox" id="moto" name="veicoli" value="Moto">
-    <label for="moto" style="width: auto;">Moto</label><br>
-    
-    <input type="checkbox" id="bici" name="veicoli" value="Bicicletta">
-    <label for="bici" style="width: auto;">Bicicletta</label><br>
-  </div>
+    <div class="sezione">
+      <p><b>Veicoli posseduti:</b></p>
+      <input type="checkbox" id="auto" name="veicoli" value="Auto">
+      <label for="auto" style="width: auto;">Auto</label><br>
+      
+      <input type="checkbox" id="moto" name="veicoli" value="Moto">
+      <label for="moto" style="width: auto;">Moto</label><br>
+      
+      <input type="checkbox" id="bici" name="veicoli" value="Bicicletta">
+      <label for="bici" style="width: auto;">Bicicletta</label><br>
+    </div>
 
-  <div class="sezione">
-    <label for="provincia">Provincia:</label>
-    <select id="provincia">
-      <option value="">-- Seleziona --</option>
-      <option value="MI">Milano</option>
-      <option value="RM">Roma</option>
-      <option value="NA">Napoli</option>
-      <option value="TO">Torino</option>
-      <option value="altro">Altro</option>
-    </select><br>
+    <div class="sezione">
+      <label for="provincia">Provincia:</label>
+      <select id="provincia">
+        <option value="">-- Seleziona --</option>
+        <option value="MI">Milano</option>
+        <option value="RM">Roma</option>
+        <option value="NA">Napoli</option>
+        <option value="TO">Torino</option>
+        <option value="altro">Altro</option>
+      </select><br>
 
-    <label for="sport">Sport praticati:</label>
-    <input type="text" id="sport" placeholder="es. calcio, tennis">
-  </div>
+      <label for="sport">Sport praticati:</label>
+      <input type="text" id="sport" placeholder="es. calcio, tennis">
+    </div>
   
-  <br>
+    <br>
 
-  <button onclick="mostraDati()">MOSTRA DATI</button>
+    <button onclick="mostraDati()">MOSTRA DATI</button>
 
-  <div id="risultato">
-    Qui appariranno i dati...
+    <div id="risultato">
+      Qui appariranno i dati...
+    </div>
   </div>
 
   <script>
@@ -191,9 +217,4 @@
       testo += "<b>Veicoli posseduti:</b> " + veicoli + "<br>";
       testo += "<b>Sport praticati:</b> " + sport + "<br>";
 
-      document.getElementById("risultato").innerHTML = testo;
-    }
-  </script>
-
-</body>
-</html>
+      document.getElementById("risultato").
