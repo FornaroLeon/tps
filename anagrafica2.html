@@ -7,28 +7,70 @@
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
+      background-color: #f4f4f9;
     }
-    input, select {
+    h2 {
+      color: #4CAF50;
+    }
+    input, select, button {
       margin-bottom: 10px;
-      padding: 5px;
-      width: 200px;
+      padding: 8px;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    input:focus, select:focus {
+      border-color: #4CAF50;
+      outline: none;
     }
     label {
       display: inline-block;
-      width: 150px;
-      margin-top: 5px;
+      width: 100%;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
     }
     .sezione {
-        margin-top: 15px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        width: 380px;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e9f7ef;
+      border-radius: 6px;
+      border: 1px solid #d1e7d1;
+    }
+    .sezione p {
+      font-weight: bold;
+      color: #2f6a3c;
+    }
+    .sezione input[type="radio"], .sezione input[type="checkbox"] {
+      margin-right: 8px;
     }
     #risultato {
       margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #000;
-      width: 380px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 12px;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 6px;
+    }
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
@@ -92,7 +134,7 @@
   
   <br>
 
-  <input type="button" value="MOSTRA DATI" onclick="mostraDati()" style="width: 400px;">
+  <button onclick="mostraDati()">MOSTRA DATI</button>
 
   <div id="risultato">
     Qui appariranno i dati...
