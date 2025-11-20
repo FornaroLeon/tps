@@ -2,20 +2,20 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Anagrafica Senza Commenti</title>
+  <title>Anagrafica</title>
   <style>
-    /* Imposta il body per usare Flexbox */
     body {
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      min-height: 100vh;
       background-color: #f4f4f9;
       margin: 0;
+      padding: 30px 0;
+      overflow-y: auto;
     }
-    
-    /* Container per il modulo */
+
     .container {
       width: 100%;
       max-width: 600px;
@@ -68,7 +68,8 @@
       color: #2f6a3c;
     }
 
-    .sezione input[type="radio"], .sezione input[type="checkbox"] {
+    .sezione input[type="radio"], 
+    .sezione input[type="checkbox"] {
       margin-right: 8px;
     }
 
@@ -104,42 +105,43 @@
     <h2>Modulo Anagrafica</h2>
 
     <label for="nome">Nome:</label>
-    <input type="text" id="nome"><br>
+    <input type="text" id="nome">
 
     <label for="cognome">Cognome:</label>
-    <input type="text" id="cognome"><br>
+    <input type="text" id="cognome">
 
     <label for="indirizzo">Indirizzo:</label>
-    <input type="text" id="indirizzo"><br>
+    <input type="text" id="indirizzo">
 
     <label for="citta">Città:</label>
-    <input type="text" id="citta"><br>
+    <input type="text" id="citta">
 
     <label for="cap">CAP:</label>
-    <input type="text" id="cap"><br>
+    <input type="text" id="cap">
 
     <label for="anno">Anno di nascita:</label>
-    <input type="text" id="anno"><br>
+    <input type="text" id="anno">
 
     <div class="sezione">
-      <p><b>Sesso:</b></p>
+      <p>Sesso:</p>
       <input type="radio" id="sesso_m" name="sesso" value="Maschile" checked>
-      <label for="sesso_m" style="width: auto;">Maschile</label><br>
+      <label for="sesso_m" style="width:auto;">Maschile</label><br>
 
       <input type="radio" id="sesso_f" name="sesso" value="Femminile">
-      <label for="sesso_f" style="width: auto;">Femminile</label><br>
+      <label for="sesso_f" style="width:auto;">Femminile</label><br>
     </div>
 
     <div class="sezione">
-      <p><b>Veicoli posseduti:</b></p>
+      <p>Veicoli posseduti:</p>
+
       <input type="checkbox" id="auto" name="veicoli" value="Auto">
-      <label for="auto" style="width: auto;">Auto</label><br>
-      
+      <label for="auto" style="width:auto;">Auto</label><br>
+
       <input type="checkbox" id="moto" name="veicoli" value="Moto">
-      <label for="moto" style="width: auto;">Moto</label><br>
-      
+      <label for="moto" style="width:auto;">Moto</label><br>
+
       <input type="checkbox" id="bici" name="veicoli" value="Bicicletta">
-      <label for="bici" style="width: auto;">Bicicletta</label><br>
+      <label for="bici" style="width:auto;">Bicicletta</label><br>
     </div>
 
     <div class="sezione">
@@ -151,19 +153,15 @@
         <option value="NA">Napoli</option>
         <option value="TO">Torino</option>
         <option value="altro">Altro</option>
-      </select><br>
+      </select>
 
       <label for="sport">Sport praticati:</label>
       <input type="text" id="sport" placeholder="es. calcio, tennis">
     </div>
-  
-    <br>
 
     <button onclick="mostraDati()">MOSTRA DATI</button>
 
-    <div id="risultato">
-      Qui appariranno i dati...
-    </div>
+    <div id="risultato">Qui appariranno i dati...</div>
   </div>
 
   <script>
@@ -174,25 +172,21 @@
       let citta = document.getElementById("citta").value;
       let cap = document.getElementById("cap").value;
       let anno = parseInt(document.getElementById("anno").value);
-      
-      let sessoElement = document.querySelector('input[name="sesso"]:checked');
-      let sesso = sessoElement ? sessoElement.value : "Non scelto";
 
-      let provincia = document.getElementById("provincia").value;
-      let nomeProvincia = document.getElementById("provincia").options[document.getElementById("provincia").selectedIndex].text;
+      let sesso = document.querySelector('input[name="sesso"]:checked')?.value || "Non scelto";
+
+      let selectProvincia = document.getElementById("provincia");
+      let nomeProvincia = selectProvincia.options[selectProvincia.selectedIndex].text;
 
       let sport = document.getElementById("sport").value || "Nessuno";
 
-      let veicoliArray = [];
-      let veicoliCheckboxes = document.querySelectorAll('input[name="veicoli"]:checked');
-      veicoliCheckboxes.forEach(function(checkbox) {
-        veicoliArray.push(checkbox.value);
-      });
-      let veicoli = veicoliArray.length > 0 ? veicoliArray.join(", ") : "Nessuno";
+      let veicoli = [...document.querySelectorAll('input[name="veicoli"]:checked')]
+                    .map(v => v.value)
+                    .join(", ") || "Nessuno";
 
       let annoCorrente = new Date().getFullYear();
-      let eta = (anno && !isNaN(anno)) ? (annoCorrente - anno) : "Non valido";
-      
+      let eta = (!isNaN(anno)) ? (annoCorrente - anno) : "Non valido";
+
       let generazione = "Non calcolabile";
       if (!isNaN(anno)) {
         if (anno >= 2013) generazione = "Generazione Alpha";
@@ -203,18 +197,25 @@
         else generazione = "Altro";
       }
 
-      let testo = "<h3>Dati Inseriti</h3>";
-      testo += "<b>Nome:</b> " + nome + "<br>";
-      testo += "<b>Cognome:</b> " + cognome + "<br>";
-      testo += "<b>Sesso:</b> " + sesso + "<br>";
-      testo += "<b>Indirizzo:</b> " + indirizzo + "<br>";
-      testo += "<b>Città:</b> " + citta + "<br>";
-      testo += "<b>Provincia:</b> " + nomeProvincia + "<br>";
-      testo += "<b>CAP:</b> " + cap + "<br>";
-      testo += "<b>Anno di nascita:</b> " + (isNaN(anno) ? "Non specificato" : anno) + "<br>";
-      testo += "<b>Età:</b> " + eta + "<br>";
-      testo += "<b>Generazione:</b> " + generazione + "<br>";
-      testo += "<b>Veicoli posseduti:</b> " + veicoli + "<br>";
-      testo += "<b>Sport praticati:</b> " + sport + "<br>";
+      let testo = `
+        <h3>Dati Inseriti</h3>
+        <b>Nome:</b> ${nome}<br>
+        <b>Cognome:</b> ${cognome}<br>
+        <b>Sesso:</b> ${sesso}<br>
+        <b>Indirizzo:</b> ${indirizzo}<br>
+        <b>Città:</b> ${citta}<br>
+        <b>Provincia:</b> ${nomeProvincia}<br>
+        <b>CAP:</b> ${cap}<br>
+        <b>Anno di nascita:</b> ${isNaN(anno) ? "Non specificato" : anno}<br>
+        <b>Età:</b> ${eta}<br>
+        <b>Generazione:</b> ${generazione}<br>
+        <b>Veicoli posseduti:</b> ${veicoli}<br>
+        <b>Sport praticati:</b> ${sport}<br>
+      `;
 
-      document.getElementById("risultato").
+      document.getElementById("risultato").innerHTML = testo;
+    }
+  </script>
+
+</body>
+</html>
