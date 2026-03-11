@@ -1,20 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Anagrafica CSV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestione Dati Personali</title>
 
 <style>
-#contenitore{
-display:flex;
-flex-wrap:wrap;
-}
-
-.blocco{
-border:1px solid black;
-margin:10px;
-padding:10px;
-width:200px;
+.error{
+color:red;
+font-size:12px;
 }
 </style>
 
@@ -22,56 +16,146 @@ width:200px;
 
 <body>
 
-<h2>Carica file CSV</h2>
+<h1>Gestione Dati Personali</h1>
 
-<input type="file" id="file">
+<form id="formDati">
 
-<div id="contenitore"></div>
+Nome: <input type="text" id="nome" required>
+<span id="errNome" class="error"></span>
+<br>
+
+Cognome: <input type="text" id="cognome" required>
+<span id="errCognome" class="error"></span>
+<br>
+
+Età: <input type="number" id="eta" required><br>
+
+CAP: <input type="text" id="cap" required>
+<span id="errCap" class="error"></span>
+<br>
+
+Professione: <input type="text" id="professione" required><br>
+
+Email: <input type="text" id="email" required>
+<span id="errEmail" class="error"></span>
+<br>
+
+<button type="submit">Salva</button>
+
+</form>
+
+<hr>
+
+<table border="1">
+<thead>
+<tr>
+<th>Nome</th>
+<th>Cognome</th>
+<th>Età</th>
+<th>CAP</th>
+<th>Professione</th>
+<th>Email</th>
+</tr>
+</thead>
+
+<tbody id="tabellaDati"></tbody>
+
+</table>
 
 <script>
 
-let file = document.getElementById("file");
+const form = document.getElementById('formDati');
+const tabella = document.getElementById('tabellaDati');
+const elenco = JSON.parse(localStorage.getItem('elenco')) || [];
 
-file.addEventListener("change", function(e){
+const regexNome = /^[A-Za-z]+$/;
+const regexCap = /^[0-9]+$/;
+const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$/;
 
-let reader = new FileReader();
+form.addEventListener('submit', function(e){
 
-reader.onload = function(){
+e.preventDefault();
 
-let testo = reader.result;
+document.getElementById("errNome").textContent="";
+document.getElementById("errCognome").textContent="";
+document.getElementById("errCap").textContent="";
+document.getElementById("errEmail").textContent="";
 
-let righe = testo.split("\n");
+let nome = document.getElementById('nome').value;
+let cognome = document.getElementById('cognome').value;
+let eta = document.getElementById('eta').value;
+let cap = document.getElementById('cap').value;
+let professione = document.getElementById('professione').value;
+let email = document.getElementById('email').value;
 
-crea(righe,1);
+let valido = true;
 
+if(!regexNome.test(nome)){
+document.getElementById("errNome").textContent="Solo lettere";
+valido=false;
 }
 
-reader.readAsText(e.target.files[0]);
+if(!regexNome.test(cognome)){
+document.getElementById("errCognome").textContent="Solo lettere";
+valido=false;
+}
+
+if(!regexCap.test(cap)){
+document.getElementById("errCap").textContent="Solo numeri";
+valido=false;
+}
+
+if(!regexEmail.test(email)){
+document.getElementById("errEmail").textContent="Email non valida";
+valido=false;
+}
+
+if(valido){
+
+const persona = {
+nome:nome,
+cognome:cognome,
+eta:eta,
+cap:cap,
+professione:professione,
+email:email
+};
+
+elenco.push(persona);
+
+localStorage.setItem('elenco', JSON.stringify(elenco));
+
+form.reset();
+
+mostraDati();
+
+}
 
 });
 
-function crea(righe,i){
+function mostraDati(){
 
-if(i >= righe.length){
-return;
-}
+tabella.innerHTML="";
 
-let dati = righe[i].split(",");
+for(let i=0;i<elenco.length;i++){
 
-let div = document.createElement("div");
+let riga = document.createElement("tr");
 
-div.className="blocco";
+riga.innerHTML =
+"<td>"+elenco[i].nome+"</td>"+
+"<td>"+elenco[i].cognome+"</td>"+
+"<td>"+elenco[i].eta+"</td>"+
+"<td>"+elenco[i].cap+"</td>"+
+"<td>"+elenco[i].professione+"</td>"+
+"<td>"+elenco[i].email+"</td>";
 
-div.innerHTML =
-"Nome: " + dati[0] + "<br>" +
-"Cognome: " + dati[1] + "<br>" +
-"Email: " + dati[2];
-
-document.getElementById("contenitore").appendChild(div);
-
-crea(righe,i+1);
+tabella.appendChild(riga);
 
 }
+
+}
+
+mostraDati();
 
 </script>
 
