@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Anagrafica CSV</title>
+
+<style>
+#contenitore{
+display:flex;
+flex-wrap:wrap;
+}
+
+.blocco{
+border:1px solid black;
+margin:10px;
+padding:10px;
+width:200px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Carica file CSV</h2>
+
+<input type="file" id="file">
+
+<div id="contenitore"></div>
+
+<script>
+
+let file = document.getElementById("file");
+
+file.addEventListener("change", function(e){
+
+let reader = new FileReader();
+
+reader.onload = function(){
+
+let testo = reader.result;
+
+let righe = testo.split("\n");
+
+crea(righe,1);
+
+}
+
+reader.readAsText(e.target.files[0]);
+
+});
+
+function crea(righe,i){
+
+if(i >= righe.length){
+return;
+}
+
+let dati = righe[i].split(",");
+
+let div = document.createElement("div");
+
+div.className="blocco";
+
+div.innerHTML =
+"Nome: " + dati[0] + "<br>" +
+"Cognome: " + dati[1] + "<br>" +
+"Email: " + dati[2];
+
+document.getElementById("contenitore").appendChild(div);
+
+crea(righe,i+1);
+
+}
+
+</script>
+
+</body>
+</html>
