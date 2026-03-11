@@ -1,103 +1,173 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Anagrafica con Validazione Regex</title>
-  <style>
-    .error { color: red; font-size: 0.85em; display: block; margin-bottom: 5px; }
-    input { margin-bottom: 10px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestione Dati Personali</title>
+
+<style>
+.error{
+color:red;
+font-size:12px;
+}
+</style>
+
 </head>
+
 <body>
 
-  <h1>Gestione Dati Personali</h1>
+<h1>Gestione Dati Personali</h1>
 
-  <form id="formDati">
-    Nome: <input type="text" id="nome" required> <span id="errNome" class="error"></span>
-    Cognome: <input type="text" id="cognome" required> <span id="errCognome" class="error"></span>
-    Età: <input type="number" id="eta" required><br>
-    CAP: <input type="text" id="cap" required> <span id="errCap" class="error"></span>
-    Professione: <input type="text" id="professione" required><br>
-    Email: <input type="text" id="email" required> <span id="errEmail" class="error"></span>
-    <button type="submit">Salva</button>
-  </form>
+<form id="formDati">
 
-  <hr>
-  <table border="1" width="100%">
-    <thead>
-      <tr>
-        <th>Nome</th><th>Cognome</th><th>Età</th><th>CAP</th><th>Professione</th><th>Email</th>
-      </tr>
-    </thead>
-    <tbody id="tabellaDati"></tbody>
-  </table>
+Nome: <input type="text" id="nome" required>
+<span id="errNome" class="error"></span>
+<br>
 
-  <script>
-    const form = document.getElementById('formDati');
-    const elenco = JSON.parse(localStorage.getItem('elenco')) || [];
+Cognome: <input type="text" id="cognome" required>
+<span id="errCognome" class="error"></span>
+<br>
 
-    // --- ESPRESSIONI REGOLARI ---
-    const regexLettere = /^[A-Za-zÀ-ÿ\s]+$/; // Solo lettere e spazi
-    const regexCap = /^\d+$/;                // Solo numeri
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$/; // Email con @, . e estensione 2-6
+Età: <input type="number" id="eta" required><br>
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Reset messaggi errore
-      document.querySelectorAll('.error').forEach(s => s.textContent = "");
+CAP: <input type="text" id="cap" required>
+<span id="errCap" class="error"></span>
+<br>
 
-      const dati = {
-        nome: document.getElementById('nome').value.trim(),
-        cognome: document.getElementById('cognome').value.trim(),
-        eta: document.getElementById('eta').value,
-        cap: document.getElementById('cap').value.trim(),
-        professione: document.getElementById('professione').value,
-        email: document.getElementById('email').value.trim()
-      };
+Professione: <input type="text" id="professione" required><br>
 
-      let valido = true;
+Email: <input type="text" id="email" required>
+<span id="errEmail" class="error"></span>
+<br>
 
-      // Validazione Nome e Cognome
-      if (!regexLettere.test(dati.nome)) { 
-        document.getElementById('errNome').textContent = "Usa solo lettere"; 
-        valido = false; 
-      }
-      if (!regexLettere.test(dati.cognome)) { 
-        document.getElementById('errCognome').textContent = "Usa solo lettere"; 
-        valido = false; 
-      }
-      
-      // Validazione CAP (solo numeri)
-      if (!regexCap.test(dati.cap)) { 
-        document.getElementById('errCap').textContent = "Il CAP deve contenere solo numeri"; 
-        valido = false; 
-      }
+<button type="submit">Salva</button>
 
-      // Validazione Email
-      if (!regexEmail.test(dati.email)) { 
-        document.getElementById('errEmail').textContent = "Email non valida (es: nome@dominio.it)"; 
-        valido = false; 
-      }
+</form>
 
-      if (valido) {
-        elenco.push(dati);
-        localStorage.setItem('elenco', JSON.stringify(elenco));
-        form.reset();
-        mostraDati();
-      }
-    });
+<hr>
 
-    function mostraDati() {
-      const tabella = document.getElementById('tabellaDati');
-      tabella.innerHTML = elenco.map(p => `
-        <tr>
-          <td>${p.nome}</td><td>${p.cognome}</td><td>${p.eta}</td>
-          <td>${p.cap}</td><td>${p.professione}</td><td>${p.email}</td>
-        </tr>`).join('');
-    }
+<table border="1">
+<thead>
+<tr>
+<th>Nome</th>
+<th>Cognome</th>
+<th>Età</th>
+<th>CAP</th>
+<th>Professione</th>
+<th>Email</th>
+</tr>
+</thead>
 
-    mostraDati();
-  </script>
+<tbody id="tabellaDati"></tbody>
+
+</table>
+
+<script>
+
+const form = document.getElementById('formDati');
+const tabella = document.getElementById('tabellaDati');
+const elenco = JSON.parse(localStorage.getItem('elenco')) || [];
+
+/* REGEX SEMPLICI */
+
+const regexNome = /^[A-Za-z]+$/;
+const regexCap = /^[0-9]+$/;
+const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$/;
+
+form.addEventListener('submit', function(e){
+
+e.preventDefault();
+
+/* PULISCO ERRORI */
+
+document.getElementById("errNome").textContent="";
+document.getElementById("errCognome").textContent="";
+document.getElementById("errCap").textContent="";
+document.getElementById("errEmail").textContent="";
+
+/* PRENDO I VALORI */
+
+let nome = document.getElementById('nome').value;
+let cognome = document.getElementById('cognome').value;
+let eta = document.getElementById('eta').value;
+let cap = document.getElementById('cap').value;
+let professione = document.getElementById('professione').value;
+let email = document.getElementById('email').value;
+
+let valido = true;
+
+/* CONTROLLI */
+
+if(!regexNome.test(nome)){
+document.getElementById("errNome").textContent="Solo lettere";
+valido=false;
+}
+
+if(!regexNome.test(cognome)){
+document.getElementById("errCognome").textContent="Solo lettere";
+valido=false;
+}
+
+if(!regexCap.test(cap)){
+document.getElementById("errCap").textContent="Solo numeri";
+valido=false;
+}
+
+if(!regexEmail.test(email)){
+document.getElementById("errEmail").textContent="Email non valida";
+valido=false;
+}
+
+/* SALVATAGGIO */
+
+if(valido){
+
+const persona = {
+nome:nome,
+cognome:cognome,
+eta:eta,
+cap:cap,
+professione:professione,
+email:email
+};
+
+elenco.push(persona);
+
+localStorage.setItem('elenco', JSON.stringify(elenco));
+
+form.reset();
+
+mostraDati();
+
+}
+
+});
+
+function mostraDati(){
+
+tabella.innerHTML="";
+
+for(let i=0;i<elenco.length;i++){
+
+let riga = document.createElement("tr");
+
+riga.innerHTML =
+"<td>"+elenco[i].nome+"</td>"+
+"<td>"+elenco[i].cognome+"</td>"+
+"<td>"+elenco[i].eta+"</td>"+
+"<td>"+elenco[i].cap+"</td>"+
+"<td>"+elenco[i].professione+"</td>"+
+"<td>"+elenco[i].email+"</td>";
+
+tabella.appendChild(riga);
+
+}
+
+}
+
+mostraDati();
+
+</script>
+
 </body>
 </html>
