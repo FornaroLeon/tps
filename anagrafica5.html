@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestione Dati Personali</title>
+<title>Anagrafica CSV</title>
 
 <style>
-.error{
-color:red;
-font-size:12px;
+#contenitore{
+display:flex;
+flex-wrap:wrap;
+}
+
+.blocco{
+border:1px solid black;
+margin:10px;
+padding:10px;
+width:200px;
 }
 </style>
 
@@ -16,156 +22,56 @@ font-size:12px;
 
 <body>
 
-<h1>Gestione Dati Personali</h1>
+<h2>Carica file CSV</h2>
 
-<form id="formDati">
+<input type="file" id="file">
 
-Nome: <input type="text" id="nome" required>
-<span id="errNome" class="error"></span>
-<br>
-
-Cognome: <input type="text" id="cognome" required>
-<span id="errCognome" class="error"></span>
-<br>
-
-Età: <input type="number" id="eta" required><br>
-
-CAP: <input type="text" id="cap" required>
-<span id="errCap" class="error"></span>
-<br>
-
-Professione: <input type="text" id="professione" required><br>
-
-Email: <input type="text" id="email" required>
-<span id="errEmail" class="error"></span>
-<br>
-
-<button type="submit">Salva</button>
-
-</form>
-
-<hr>
-
-<table border="1">
-<thead>
-<tr>
-<th>Nome</th>
-<th>Cognome</th>
-<th>Età</th>
-<th>CAP</th>
-<th>Professione</th>
-<th>Email</th>
-</tr>
-</thead>
-
-<tbody id="tabellaDati"></tbody>
-
-</table>
+<div id="contenitore"></div>
 
 <script>
 
-const form = document.getElementById('formDati');
-const tabella = document.getElementById('tabellaDati');
-const elenco = JSON.parse(localStorage.getItem('elenco')) || [];
+let file = document.getElementById("file");
 
-/* REGEX SEMPLICI */
+file.addEventListener("change", function(e){
 
-const regexNome = /^[A-Za-z]+$/;
-const regexCap = /^[0-9]+$/;
-const regexEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$/;
+let reader = new FileReader();
 
-form.addEventListener('submit', function(e){
+reader.onload = function(){
 
-e.preventDefault();
+let testo = reader.result;
 
-/* PULISCO ERRORI */
+let righe = testo.split("\n");
 
-document.getElementById("errNome").textContent="";
-document.getElementById("errCognome").textContent="";
-document.getElementById("errCap").textContent="";
-document.getElementById("errEmail").textContent="";
-
-/* PRENDO I VALORI */
-
-let nome = document.getElementById('nome').value;
-let cognome = document.getElementById('cognome').value;
-let eta = document.getElementById('eta').value;
-let cap = document.getElementById('cap').value;
-let professione = document.getElementById('professione').value;
-let email = document.getElementById('email').value;
-
-let valido = true;
-
-/* CONTROLLI */
-
-if(!regexNome.test(nome)){
-document.getElementById("errNome").textContent="Solo lettere";
-valido=false;
-}
-
-if(!regexNome.test(cognome)){
-document.getElementById("errCognome").textContent="Solo lettere";
-valido=false;
-}
-
-if(!regexCap.test(cap)){
-document.getElementById("errCap").textContent="Solo numeri";
-valido=false;
-}
-
-if(!regexEmail.test(email)){
-document.getElementById("errEmail").textContent="Email non valida";
-valido=false;
-}
-
-/* SALVATAGGIO */
-
-if(valido){
-
-const persona = {
-nome:nome,
-cognome:cognome,
-eta:eta,
-cap:cap,
-professione:professione,
-email:email
-};
-
-elenco.push(persona);
-
-localStorage.setItem('elenco', JSON.stringify(elenco));
-
-form.reset();
-
-mostraDati();
+crea(righe,1);
 
 }
+
+reader.readAsText(e.target.files[0]);
 
 });
 
-function mostraDati(){
+function crea(righe,i){
 
-tabella.innerHTML="";
-
-for(let i=0;i<elenco.length;i++){
-
-let riga = document.createElement("tr");
-
-riga.innerHTML =
-"<td>"+elenco[i].nome+"</td>"+
-"<td>"+elenco[i].cognome+"</td>"+
-"<td>"+elenco[i].eta+"</td>"+
-"<td>"+elenco[i].cap+"</td>"+
-"<td>"+elenco[i].professione+"</td>"+
-"<td>"+elenco[i].email+"</td>";
-
-tabella.appendChild(riga);
-
+if(i >= righe.length){
+return;
 }
 
-}
+let dati = righe[i].split(",");
 
-mostraDati();
+let div = document.createElement("div");
+
+div.className="blocco";
+
+div.innerHTML =
+"Nome: " + dati[0] + "<br>" +
+"Cognome: " + dati[1] + "<br>" +
+"Email: " + dati[2];
+
+document.getElementById("contenitore").appendChild(div);
+
+crea(righe,i+1);
+
+}
 
 </script>
 
