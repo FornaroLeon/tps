@@ -1,39 +1,61 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <a href="https://fornaroleon.github.io/tps/conversione.html">
-      Conversione
-    </a><br>
-    <a href="https://fornaroleon.github.io/tps/anagrafica/anagrafica1.html">
-      Anagrafica1.1
-    </a><br>
-    <a href="https://fornaroleon.github.io/tps/subnetmask.html">
-      Subnet mask
-    </a><br>
-    <a href="https://fornaroleon.github.io/tps/suffix.html">
-      Suffix
-    </a> <br>
-    <a href="https://fornaroleon.github.io/tps/anagrafica2.html">
-      Anagrafica2
-    </a> <br>
-    <a href="https://fornaroleon.github.io/tps/calcolatrice.html">
-      Calcolatrice
-    </a> <br>
-     <a href="https://fornaroleon.github.io/tps/anagrafica3.html">
-      anagrafica3
-    </a> <br>
-     <a href="https://fornaroleon.github.io/tps/lavorourl.html">
-      lavorourl
-    </a> <br>
-     <a href="https://fornaroleon.github.io/tps/anagrafica4.html">
-      anagrafica 4
-    </a> <br>
-    <a href="https://fornaroleon.github.io/tps/anagrafica5.html">
-      anagrafica 5
-    </a> <br>
-    <a href="https://fornaroleon.github.io/tps/fileesterno.html">
-      Anagrafica da file esterno
-    </a>
-  </body>
-</html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Mio Negozio Universale</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #eee; }
+header { display: flex; justify-content: space-between; background: #333; color: white; padding: 15px; }
+header a { color: white; text-decoration: none; }
+.catalogo {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+margin-top: 20px;
+}
+.card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+.card img { max-width: 100%; height: 150px; object-fit: contain; }
+.card h3 { margin: 10px 0; }
+.card .prezzo { color: #d9534f; font-weight: bold; font-size: 1.2em; }
+.btn { background: #007bff; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 10px;}
+</style>
+</head>
+<body>
 
+<header>
+<h1>Negozio Online</h1>
+<a href="carrello.html">🛒 Carrello (<span id="conteggio-carrello">0</span>)</a>
+</header>
+
+<div class="catalogo" id="griglia-prodotti"></div>
+
+<script>
+const prodotti = JSON.parse(localStorage.getItem('catalogoProdotti')) || [];
+const griglia = document.getElementById('griglia-prodotti');
+
+if (prodotti.length === 0) {
+griglia.innerHTML = `
+<p>Nessun prodotto trovato.</p>
+<a href="configurazione.html" class="btn">
+Vai alla Configurazione
+</a>
+`;}
+
+prodotti.forEach(prod => {
+const card = document.createElement('div');
+card.className = 'card';
+card.innerHTML = `
+<img src="${prod.immagine}" alt="${prod.marca}">
+<h3>${prod.marca} - ${prod.modello}</h3>
+<p class="prezzo">€ ${prod.prezzo}</p>
+<a href="dettaglio.html?id=${prod.id}" class="btn">Vedi Dettagli</a>
+`;
+griglia.appendChild(card);
+});
+
+const carrello = JSON.parse(localStorage.getItem('carrello')) || [];
+document.getElementById('conteggio-carrello').innerText = carrello.length;
+</script>
+</body>
+</html>

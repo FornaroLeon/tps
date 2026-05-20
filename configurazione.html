@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configurazione Piattaforma</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+.box { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: #f9f9f9; }
+button { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; }
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>Configurazione Negozio</h2>
+<p>Seleziona il file .csv con i tuoi prodotti:</p>
+<input type="file" id="csvFile" accept=".csv"><br><br>
+<button onclick="caricaDati()">Salva Configurazione</button>
+</div>
+
+<script>
+function caricaDati() {
+const fileInput = document.getElementById('csvFile');
+const file = fileInput.files[0];
+
+if (!file) {
+alert("Per favore, seleziona un file CSV!");
+return;
+}
+
+const reader = new FileReader();
+reader.onload = function(e) {
+const testo = e.target.result;
+const righe = testo.split("\n");
+let prodotti = [];
+
+for (let i = 1; i < righe.length; i++) {
+if (righe[i].trim() === "") continue;
+
+const colonne = righe[i].split(",");
+
+let prodotto = {
+id: i,
+marca: colonne[0].trim(),
+modello: colonne[1].trim(),
+descrizione: colonne[2].trim(),
+immagine: colonne[3].trim(),
+prezzo: colonne[4].trim()
+};
+prodotti.push(prodotto);
+}
+
+localStorage.setItem('catalogoProdotti', JSON.stringify(prodotti));
+alert("Configurazione salvata con successo!");
+window.location.href = "index.html";
+};
+
+reader.readAsText(file);
+}
+</script>
+</body>
+</html>

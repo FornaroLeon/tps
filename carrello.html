@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Tuo Carrello</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+.elemento-carrello { display: flex; justify-content: space-between; background: #fff; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
+.totale { font-size: 1.3em; font-weight: bold; text-align: right; margin-top: 20px; }
+.btn-pdf { background: #dc3545; color: white; padding: 12px; width: 100%; border: none; font-size: 1.1em; cursor: pointer; margin-top: 20px; }
+.svuota { background: #6c757d; color: white; padding: 5px 10px; border: none; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<h2>Il tuo Basket</h2>
+<button class="svuota" onclick="svuotaCarrello()">Svuota</button>
+</div>
+
+<a href="index.html">← Continua lo Shopping</a>
+
+<div id="lista-carrello" style="margin-top: 20px;"></div>
+
+<div class="totale">Totale: € <span id="prezzo-totale">0</span></div>
+
+<button class="btn-pdf" onclick="stampaRicevutaPDF()">Perfeziona Acquisto (Stampa PDF)</button>
+
+<script>
+const carrello = JSON.parse(localStorage.getItem('carrello')) || [];
+const lista = document.getElementById('lista-carrello');
+let totale = 0;
+
+if (carrello.length === 0) {
+lista.innerHTML = "<p>Il carrello è vuoto.</p>";
+}
+
+carrello.forEach(prod => {
+const item = document.createElement('div');
+item.className = 'elemento-carrello';
+item.innerHTML = `
+<span><strong>${prod.marca}</strong> - ${prod.modello}</span>
+<span>€ ${prod.prezzo}</span>
+`;
+lista.appendChild(item);
+totale += parseFloat(prod.prezzo) || 0;
+});
+
+document.getElementById('prezzo-totale').innerText = totale.toFixed(2);
+
+function stampaRicevutaPDF() {
+if (carrello.length === 0) {
+alert("Il carrello è vuoto! Impossibile stampare la ricevuta.");
+return;
+}
+
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+
+doc.setFont("Helvetica", "bold");
+doc.setFontSize(22);
+doc.text("RICEVUTA D'ACQUISTO ONLINE", 20, 20);
+
+doc.setFont("Helvetica", "normal");
+doc.setFontSize(12);
+doc.text("Grazie per il tuo acquisto sulla nostra piattaforma universale.", 20, 30);
+doc.text("----------------------------------------------------------------------", 20, 38);
+
+let coordinataY = 50;
+doc.setFont("Helvetica", "bold");
+doc.text("Articolo", 20, coordinataY);
+doc.text("Prezzo", 150, coordinataY);
+doc.setFont("Helvetica", "normal");
+
+carrello.forEach(prod => {
+coordinataY += 10;
+doc.text(`${prod.marca} ${prod.modello}`, 20, coordinataY);
+doc.text(`Euro ${prod.prezzo}`, 150, coordinataY);
+});
+
+coordinataY += 20;
+doc.text("----------------------------------------------------------------------", 20, coordinataY - 5);
+doc.setFont("Helvetica", "bold");
+doc.setFontSize(14);
+doc.text(`TOTALE PAGATO: Euro ${totale.toFixed(2)}`, 20, coordinataY);
+
+doc.save("ricevuta_acquisto.pdf");
+
+alert("Acquisto completato! Il tuo PDF è in download.");
+
+localStorage.removeItem('carrello');
+
+window.location.href = "index.html";}
+
+function svuotaCarrello() {
+localStorage.removeItem('carrello');
+window.location.reload();
+}
+</script>
+</body>
+</html>
