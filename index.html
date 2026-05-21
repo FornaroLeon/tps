@@ -46,7 +46,11 @@ prodotti.forEach(prod => {
 const card = document.createElement('div');
 card.className = 'card';
 card.innerHTML = `
-<img src="${prod.immagine}" alt="${prod.marca}">
+<img 
+src="${prod.immagine || 'https://via.placeholder.com/300x200?text=Nessuna+Immagine'}" 
+alt="${prod.marca}"
+onerror="this.src='https://via.placeholder.com/300x200?text=Immagine+Non+Disponibile'"
+>
 <h3>${prod.marca} - ${prod.modello}</h3>
 <p class="prezzo">€ ${prod.prezzo}</p>
 <a href="dettaglio.html?id=${prod.id}" class="btn">Vedi Dettagli</a>
