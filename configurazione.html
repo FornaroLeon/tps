@@ -45,7 +45,7 @@ id: i,
 marca: colonne[0].trim(),
 modello: colonne[1].trim(),
 descrizione: colonne[2].trim(),
-immagine: colonne[3].trim(),
+immagine: colonne[3] ? colonne[3].replace(/"/g, "") : "",
 prezzo: colonne[4].trim()
 };
 prodotti.push(prodotto);
