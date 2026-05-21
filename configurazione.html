@@ -38,7 +38,7 @@ let prodotti = [];
 for (let i = 1; i < righe.length; i++) {
 if (righe[i].trim() === "") continue;
 
-const colonne = righe[i].split(",");
+const colonne = righe[i].split(",").map(c => c.trim());
 
 let prodotto = {
 id: i,
