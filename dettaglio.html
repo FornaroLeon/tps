@@ -32,7 +32,11 @@ if (prod) {
 contenitore.innerHTML = `
 <h2>${prod.marca}</h2>
 <h3>Modello: ${prod.modello}</h3>
-<img src="${prod.immagine}" alt="Immagine">
+<img 
+src="${prod.immagine || 'https://via.placeholder.com/500x300?text=Nessuna+Immagine'}" 
+alt="Immagine"
+onerror="this.src='https://via.placeholder.com/500x300?text=Immagine+Non+Disponibile'"
+>
 <p><strong>Descrizione:</strong> ${prod.descrizione}</p>
 <p class="prezzo">Prezzo: € ${prod.prezzo}</p>
 <button class="btn-carrello" onclick="aggiungiAlCarrello()">Aggiungi al Carrello</button>
