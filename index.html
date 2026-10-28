@@ -1,65 +1,27 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Il Mio Negozio Universale</title>
-<style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #eee; }
-header { display: flex; justify-content: space-between; background: #333; color: white; padding: 15px; }
-header a { color: white; text-decoration: none; }
-.catalogo {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 20px;
-margin-top: 20px;
-}
-.card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-.card img { max-width: 100%; height: 150px; object-fit: contain; }
-.card h3 { margin: 10px 0; }
-.card .prezzo { color: #d9534f; font-weight: bold; font-size: 1.2em; }
-.btn { background: #007bff; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 10px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice dei miei progetti</title>
 </head>
 <body>
 
-<header>
-<h1>IL MERCATINO DELL'USATO</h1>
-<a href="carrello.html">🛒 Carrello (<span id="conteggio-carrello">0</span>)</a>
-</header>
+    <h1>Indice dei miei progetti</h1>
 
-<div class="catalogo" id="griglia-prodotti"></div>
+    <ul>
+        <li><a href="subnetmask.html">Subnet mask</a></li>
+        <li><a href="anagrafica2.html">Anagrafica 2</a></li>
+        <li><a href="anagrafica3.html">Anagrafica 3</a></li>
+        <li><a href="anagrafica4.html">Anagrafica 4</a></li>
+        <li><a href="anagrafica5.html">Anagrafica 5</a></li>
+        <li><a href="lavorourl.html">Lavoro url</a></li>
+        <li><a href="fileesterno.html">File Esterno</a></li>
+        <li><a href="calcolatrice.html">Calcolatrice</a></li>
+        <li><a href="covid.html">Covid</a></li>
+        <li><a href="grafico.html">Grafico</a></li>
+    </ul>
 
-<script>
-const prodotti = JSON.parse(localStorage.getItem('catalogoProdotti')) || [];
-const griglia = document.getElementById('griglia-prodotti');
-
-if (prodotti.length === 0) {
-griglia.innerHTML = `
-<p>Nessun prodotto trovato.</p>
-<a href="configurazione.html" class="btn">
-Vai alla Configurazione
-</a>
-`;}
-
-prodotti.forEach(prod => {
-const card = document.createElement('div');
-card.className = 'card';
-card.innerHTML = `
-<img 
-src="${prod.immagine || 'https://via.placeholder.com/300x200?text=Nessuna+Immagine'}" 
-alt="${prod.marca}"
-onerror="this.src='https://via.placeholder.com/300x200?text=Immagine+Non+Disponibile'"
->
-<h3>${prod.marca} - ${prod.modello}</h3>
-<p class="prezzo">€ ${prod.prezzo}</p>
-<a href="dettaglio.html?id=${prod.id}" class="btn">Vedi Dettagli</a>
-`;
-griglia.appendChild(card);
-});
-
-const carrello = JSON.parse(localStorage.getItem('carrello')) || [];
-document.getElementById('conteggio-carrello').innerText = carrello.length;
-</script>
 </body>
 </html>
