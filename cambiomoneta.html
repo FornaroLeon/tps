@@ -10,7 +10,8 @@
 
 <p>Scegli la valuta:</p>
 
-<select id="valuta"></select>
+<select id="valuta">
+</select>
 
 <p>Inserisci la quantità:</p>
 
@@ -26,7 +27,9 @@ let cambi = {};
 
 function caricaValute() {
 
-    fetch("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml")
+    let indirizzo = "https://api.allorigins.win/raw?url=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+
+    fetch(indirizzo)
     .then(response => response.text())
     .then(testo => {
 
@@ -36,12 +39,12 @@ function caricaValute() {
 
         let elenco = document.getElementById("valuta");
 
-        let opzione = document.createElement("option");
-        opzione.value = "1";
-        opzione.text = "EUR - Euro";
-        elenco.appendChild(opzione);
-
         cambi["EUR"] = 1;
+
+        let opzione = document.createElement("option");
+        opzione.value = "EUR";
+        opzione.text = "Euro";
+        elenco.appendChild(opzione);
 
         for (let i = 0; i < valute.length; i++) {
 
@@ -61,6 +64,10 @@ function caricaValute() {
             }
         }
 
+    })
+    .catch(function() {
+        document.getElementById("risultato").innerHTML =
+        "Errore nel caricamento delle valute";
     });
 
 }
