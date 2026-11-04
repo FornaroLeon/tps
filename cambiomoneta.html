@@ -1,169 +1,85 @@
-<!DOCTYPE html>
-<html lang="it">
+
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Convertitore Valute BCE</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      background-color: #f4f6f9;
-    }
-    .container {
-      max-width: 450px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #003399;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-    button {
-      background-color: #003399;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #002266;
-    }
-    .risultato {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #eef2f7;
-      border-left: 5px solid #003399;
-      font-size: 18px;
-    }
-    .stato {
-      font-size: 14px;
-      color: #666;
-      margin-top: 10px;
-      text-align: center;
-    }
-  </style>
+    <title>Convertitore Euro</title>
 </head>
+
 <body>
 
-<div class="container">
-  <h2>Convertitore Valute Euro</h2>
-  
-  <button onclick="caricaDatiBCE()">1. Carica / Aggiorna Tassi BCE</button>
-  <div id="testoStato" class="stato">Premi il pulsante per caricare i tassi.</div>
+<h1>Convertitore di valute in Euro</h1>
 
-  <hr style="margin-top: 20px;">
+<p>Scegli la valuta:</p>
 
-  <label for="campoQuantita">Importo:</label>
-  <input type="number" id="campoQuantita" value="100" placeholder="Inserisci la quantità">
+<select id="valuta"></select>
 
-  <label for="listaDivise">Seleziona la Divisa (Valuta):</label>
-  <select id="listaDivise" onchange="calcolaConversione()">
-    <option value="">-- Carica prima i dati --</option>
-  </select>
+<p>Inserisci la quantità:</p>
 
-  <button onclick="calcolaConversione()">2. Calcola Controvalore</button>
+<input type="number" id="quantita">
 
-  <div class="risultato" id="boxRisultato">
-    Il risultato apparirà qui.
-  </div>
-</div>
+<button onclick="calcola()">Converti</button>
+
+<p id="risultato"></p>
 
 <script>
-  var tassiDiCambio = {};
 
-  function caricaDatiBCE() {
-    var messaggioStato = document.getElementById("testoStato");
-    messaggioStato.innerText = "Caricamento in corso...";
+let cambi = {};
 
-    var urlXML = "https://api.allorigins.win/raw?url=" + encodeURIComponent("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+function caricaValute() {
 
-    var richiesta = new XMLHttpRequest();
-    richiesta.open("GET", urlXML, true);
+    fetch("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml")
+    .then(response => response.text())
+    .then(testo => {
 
-    richiesta.onload = function() {
-      if (richiesta.status === 200) {
-        var xmlDoc = richiesta.responseXML;
-        
-        if (!xmlDoc) {
-          var parser = new DOMParser();
-          xmlDoc = parser.parseFromString(richiesta.responseText, "text/xml");
+        let documento = new DOMParser().parseFromString(testo, "text/xml");
+
+        let valute = documento.getElementsByTagName("Cube");
+
+        let elenco = document.getElementById("valuta");
+
+        let opzione = document.createElement("option");
+        opzione.value = "1";
+        opzione.text = "EUR - Euro";
+        elenco.appendChild(opzione);
+
+        cambi["EUR"] = 1;
+
+        for (let i = 0; i < valute.length; i++) {
+
+            let codice = valute[i].getAttribute("currency");
+            let cambio = valute[i].getAttribute("rate");
+
+            if (codice != null) {
+
+                cambi[codice] = cambio;
+
+                let opzione = document.createElement("option");
+
+                opzione.value = codice;
+                opzione.text = codice;
+
+                elenco.appendChild(opzione);
+            }
         }
 
-        var elementiCube = xmlDoc.getElementsByTagName("Cube");
-        var menuDropdown = document.getElementById("listaDivise");
-        
-        menuDropdown.innerHTML = "";
-        tassiDiCambio = {};
+    });
 
-        for (var i = 0; i < elementiCube.length; i++) {
-          var elemento = elementiCube[i];
-          var valuta = elemento.getAttribute("currency");
-          var tasso = elemento.getAttribute("rate");
+}
 
-          if (valuta && tasso) {
-            tassiDiCambio[valuta] = parseFloat(tasso);
+function calcola() {
 
-            var opzione = document.createElement("option");
-            opzione.value = valuta;
-            opzione.text = valuta + " (Tasso: " + tasso + ")";
-            menuDropdown.appendChild(opzione);
-          }
-        }
+    let valuta = document.getElementById("valuta").value;
 
-        messaggioStato.innerText = "Tassi caricati con successo!";
-        calcolaConversione();
-      } else {
-        messaggioStato.innerText = "Errore nel caricamento dei dati.";
-      }
-    };
+    let quantita = document.getElementById("quantita").value;
 
-    richiesta.onerror = function() {
-      messaggioStato.innerText = "Impossibile collegarsi al server BCE.";
-    };
+    let euro = quantita / cambi[valuta];
 
-    richiesta.send();
-  }
+    document.getElementById("risultato").innerHTML =
+        "Il controvalore è: " + euro.toFixed(2) + " Euro";
 
-  function calcolaConversione() {
-    var quantita = parseFloat(document.getElementById("campoQuantita").value);
-    var divisaSelezionata = document.getElementById("listaDivise").value;
-    var boxRisultato = document.getElementById("boxRisultato");
+}
 
-    if (isNaN(quantita) || quantita <= 0) {
-      boxRisultato.innerHTML = "Inserisci una quantità valida.";
-      return;
-    }
+caricaValute();
 
-    if (!divisaSelezionata || !tassiDiCambio[divisaSelezionata]) {
-      boxRisultato.innerHTML = "Carica prima i dati della BCE.";
-      return;
-    }
-
-    var tasso = tassiDiCambio[divisaSelezionata];
-    var valoreInEuro = quantita / tasso;
-    var valoreInValuta = quantita * tasso;
-
-    boxRisultato.innerHTML = 
-      "<strong>Risultato:</strong><br><br>" +
-      quantita + " " + divisaSelezionata + " = <strong>" + valoreInEuro.toFixed(2) + " €</strong><br>" +
-      "<small>(Oppure " + quantita + " € = " + valoreInValuta.toFixed(2) + " " + divisaSelezionata + ")</small>";
-  }
 </script>
 
 </body>
